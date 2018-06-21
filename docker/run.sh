@@ -7,6 +7,7 @@ ALLOW_TRANSITIVE="${ALLOW_TRANSITIVE:-false}"
 ALLOW_DELETION="${ALLOW_DELETION:-false}"
 CADDY_OPTIONS="${CADDY_OPTIONS:-}"
 PORT="${PORT:-8000}"
+ANGULAR_BASEPATH="${ANGULAR_BASEPATH}"
 
 {
     echo "Landoop Schema Registry UI ${SCHEMA_REGISTRY_UI_VERSION}"
@@ -32,7 +33,10 @@ proxy /api/schema-registry $SCHEMAREGISTRY_URL {
     $INSECURE_PROXY
 }
 EOF
-        SCHEMAREGISTRY_URL=/api/schema-registry
+        if [[ -n "$ANGULAR_BASEPATH" ]]; then
+            echo "ANGULAR_BASEPATH is set to '$ANGULAR_BASEPATH'."
+        fi
+        SCHEMAREGISTRY_URL=$ANGULAR_BASEPATH/api/schema-registry
     fi
 
     if echo "$ALLOW_TRANSITIVE" | egrep -sq "true|TRUE|y|Y|yes|YES|1"; then
